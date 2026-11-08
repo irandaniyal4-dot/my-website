@@ -30,7 +30,7 @@ android {
             storePassword = System.getenv("RASANO_KEYSTORE_PASSWORD")
             keyAlias = "rasano"
             keyPassword = System.getenv("RASANO_KEY_PASSWORD")
-            storeType = "PKCS12"
+            storeType = "JKS"
         }
     }
 
