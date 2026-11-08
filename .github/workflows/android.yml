@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -20,18 +20,14 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Install Gradle
+      - name: Check installed Gradle
         run: |
-          wget -q https://services.gradle.org/distributions/gradle-8.11.1-bin.zip
-          sudo mkdir -p /opt/gradle
-          sudo unzip -q gradle-8.11.1-bin.zip -d /opt/gradle
-          echo "/opt/gradle/gradle-8.11.1/bin" >> $GITHUB_PATH
-
-      - name: Check Gradle
-        run: gradle --version
+          which gradle
+          gradle --version
 
       - name: Build APK
-        run: gradle --no-daemon assembleDebug --stacktrace
+        run: |
+          gradle --no-daemon assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
