@@ -20,14 +20,11 @@ jobs:
           distribution: temurin
           java-version: '17'
 
-      - name: Create Keystore
+      - name: Decode Keystore
         env:
-          RASANO_KEYSTORE_PASSWORD: ${{ secrets.RASANO_KEYSTORE_PASSWORD }}
+          KEYSTORE_BASE64: ${{ secrets.RASANO_KEYSTORE_BASE64 }}
         run: |
-          keytool -genkeypair -keystore app/rasano-release.jks \
-            -alias rasano -keyalg RSA -keysize 2048 -validity 10000 \
-            -storepass "$RASANO_KEYSTORE_PASSWORD" -keypass "$RASANO_KEYSTORE_PASSWORD" \
-            -dname "CN=Rasano, OU=Rasano, O=Rasano, L=Ardabil, ST=Ardabil, C=IR"
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > app/rasano-release.jks
 
       - name: Verify Keystore
         env:
