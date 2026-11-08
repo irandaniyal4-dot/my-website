@@ -24,12 +24,21 @@ jobs:
         env:
           KEYSTORE_BASE64: ${{ secrets.RASANO_KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_BASE64" | base64 --decode > app/rasano-release.jks
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > app/rasano-release.jks
+
+      - name: Verify Keystore
+        env:
+          RASANO_KEYSTORE_PASSWORD: ${{ secrets.RASANO_KEYSTORE_PASSWORD }}
+        run: |
+          keytool -list \
+            -keystore app/rasano-release.jks \
+            -storetype JKS \
+            -storepass "$RASANO_KEYSTORE_PASSWORD"
 
       - name: Build Release APK
         env:
           RASANO_KEYSTORE_PASSWORD: ${{ secrets.RASANO_KEYSTORE_PASSWORD }}
-          RASANO_KEY_PASSWORD: ${{ secrets.RASANO_KEYSTORE_PASSWORD }}
+          RASANO_KEY_PASSWORD: ${{ secrets.RASANO_KEY_PASSWORD }}
         run: |
           gradle --no-daemon assembleRelease --stacktrace
 
