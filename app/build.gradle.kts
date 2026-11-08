@@ -23,6 +23,23 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
+
+    signingConfigs {
+        create("release") {
+            storeFile = file("rasano-release.jks")
+            storePassword = System.getenv("RASANO_KEYSTORE_PASSWORD")
+            keyAlias = "rasano"
+            keyPassword = System.getenv("RASANO_KEY_PASSWORD")
+            storeType = "PKCS12"
+        }
+    }
+
+    buildTypes {
+        release {
+            signingConfig = signingConfigs.getByName("release")
+            isMinifyEnabled = false
+        }
+    }
 }
 
 dependencies {
